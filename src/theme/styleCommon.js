@@ -17,7 +17,7 @@ const StyleCommon = StyleSheet.create({
     fontWeight: 'bold',
   },
   text: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     paddingHorizontal: 10,
     paddingVertical: 5,
