@@ -20,6 +20,7 @@ import {
   DELETE_HANGHOA,
 } from '../../../common/config';
 import axios from 'axios';
+import styleCommon from '../../../theme/styleCommon';
 
 export default function SelectHH(props) {
   const {navigation, route} = props;
@@ -29,6 +30,7 @@ export default function SelectHH(props) {
   const [dataHH, setDataHH] = useState([]);
   const [tenHH, setTenHH] = useState('');
   const header = {idKH: `${idKH}`};
+  const {text, inputTxt} = styleCommon;
 
   console.log('select HH : ==> ' + idKH);
   useEffect(() => {
@@ -123,39 +125,31 @@ export default function SelectHH(props) {
   const renderItems = ({item, index}) => {
     return (
       <TouchableOpacity
-        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
+        style={{flex: 1, justifyContent: 'space-between'}}
         onPress={() => {
           handlePrintScr(item);
         }}>
-        <View style={{flex: 1}}>
-          <Text>id {item.idHH}</Text>
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <Text>Tên Hàng </Text>
-          <Text>{item.TenHH}</Text>
-        </View>
+        <View style={{borderBottomWidth: 1, marginVertical: 10}} />
+        <Text style={text}>Tên Hàng: {item.TenHH}</Text>
       </TouchableOpacity>
     );
   };
   return (
     <SafeAreaView>
-      <Text>SelectHH</Text>
+      <Text style={[text, {fontSize: 25, color: 'blue'}]}>Hàng Hóa</Text>
       <View>
         <View style={{flexDirection: 'row'}}>
-          <Text>Tên Hàng</Text>
+          <Text style={text}>Tên Hàng</Text>
           <TextInput
+            style={inputTxt}
             placeholder="Tên hàng"
             onChangeText={txt => setTenHH(txt)}
             value={tenHH}
           />
         </View>
-        <Text>Khách Hàng : {tenKH}</Text>
+        <Text style={text}>Khách Hàng: {tenKH}</Text>
       </View>
+      <View style={{borderBottomWidth: 1, marginVertical: 10}} />
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         {DayNutBam}
       </View>

@@ -2,9 +2,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   FlatList,
   SafeAreaView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
@@ -21,6 +23,7 @@ import {
   UPDATE_CTDH,
 } from '../../../common/config';
 import axios from 'axios';
+import styleCommon from '../../../theme/styleCommon';
 
 export default function SelectCTDH(props) {
   const {navigation, route} = props;
@@ -35,11 +38,11 @@ export default function SelectCTDH(props) {
   const [slHHoa, setSLHHoa] = useState('');
   const [slDet, setSLDet] = useState('');
   const header = {idDH: `${idDH}`};
+  const {text, button1, inputTxt} = styleCommon;
 
   useEffect(() => {
     getDataWithHeader(GET_CTDH, setDataCTDH, header);
     return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const DayNutBam = tabs.map(tab => {
     return (
@@ -96,7 +99,12 @@ export default function SelectCTDH(props) {
     idHHoa === '' || mauHHoa === '' || slHHoa === ''
       ? alert('Vui lòng nhập đủ Thông tin !!!')
       : axios
-          .post(url, {idDH: idDH, idHH: idHHoa, Mau: mauHHoa, SL_Dat: slHHoa})
+          .post(url, {
+            idDH: idDH,
+            idHH: idHHoa,
+            Mau: mauHHoa,
+            SL_Dat: slHHoa,
+          })
           .then(res => {
             getDataWithHeader(GET_CTDH, setDataCTDH, header);
           })
@@ -128,7 +136,12 @@ export default function SelectCTDH(props) {
   const handleXoaCTDH = () => {
     var url = urlAPI + DELETE_CTDH;
     axios
-      .post(url, {idCTDH: idCTDHag, idDH: idDH, idHH: idHHoa, Mau: mauHHoa})
+      .post(url, {
+        idCTDH: idCTDHag,
+        idDH: idDH,
+        idHH: idHHoa,
+        Mau: mauHHoa,
+      })
       .then(res => {
         getDataWithHeader(GET_CTDH, setDataCTDH, header);
       })
@@ -140,24 +153,53 @@ export default function SelectCTDH(props) {
   };
   const renderItems = ({item, index}) => {
     return (
-      <TouchableOpacity
-        style={{flexDirection: 'row', justifyContent: 'space-between'}}
-        onPress={() => {
-          handlePrintScr(item);
-        }}>
-        <Text>{item.idCTDH}</Text>
-        <Text>Tên HH: {item.TenHH}</Text>
-        <Text>Màu: {item.Mau}</Text>
-      </TouchableOpacity>
+      <View>
+        <View style={{borderBottomWidth: 1, marginVertical: 10}} />
+        <TouchableOpacity
+          style={{flexDirection: 'row', justifyContent: 'space-between'}}
+          onPress={() => {
+            handlePrintScr(item);
+          }}>
+          <Text style={text}>{item.TenHH}</Text>
+          <Text style={text}>{item.Mau}</Text>
+          {item.SL_Det ? (
+            item.SL_Det > item.SL_Dat ? (
+              <View>
+                <Text style={[text, {color: 'red'}]}>
+                  {' '}
+                  Dệt:{item.SL_Det}/{item.SL_Dat}:Đặt
+                </Text>
+              </View>
+            ) : (
+              <View>
+                <Text style={[text, {color: 'green'}]}>
+                  {' '}
+                  Dệt:{item.SL_Det}/{item.SL_Dat}:Đặt
+                </Text>
+              </View>
+            )
+          ) : (
+            <View>
+              <Text style={text}>Đặt: {item.SL_Dat}</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
     );
   };
   return (
     <SafeAreaView>
-      <Text>SelectCTDH</Text>
+      <Text style={[text, {fontSize: 25, color: 'blue'}]}>
+        Chi Tiết Đơn Hàng
+      </Text>
       <View>
         <View style={{flexDirection: 'row'}}>
-          <Text>Tên HH: {tenHHoa}</Text>
+          <View style={{flexDirection: 'row', flex: 1}}>
+            <Text style={text}>Tên HH:</Text>
+            <Text style={[text, {color: 'green'}]}>{tenHHoa}</Text>
+          </View>
           <TouchableOpacity
+            style={[button1, {width: 110}]}
             onPress={() => {
               navigation.navigate('SelectHH', {
                 idKH: idKH,
@@ -168,26 +210,29 @@ export default function SelectCTDH(props) {
                 setTenHHoa: setTenHHoa,
               });
             }}>
-            <Text>Chọn Hàng</Text>
+            <Text style={{fontSize: 16, color: 'white'}}>Chọn Hàng</Text>
           </TouchableOpacity>
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Text>Màu:</Text>
+          <Text style={text}>Màu: </Text>
           <TextInput
+            style={inputTxt}
             placeholder="Màu"
             onChangeText={txt => setMauHHoa(txt)}
             value={mauHHoa}
           />
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Text>Dệt {slDet} / SL Đặt: </Text>
+          <Text style={text}>SL Đặt:</Text>
           <TextInput
+            style={inputTxt}
             placeholder="SL Đặt"
             onChangeText={txt => setSLHHoa(txt)}
             value={'' + slHHoa}
           />
         </View>
       </View>
+      <View style={{borderBottomWidth: 1, marginVertical: 10}} />
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         {DayNutBam}
       </View>
@@ -199,3 +244,5 @@ export default function SelectCTDH(props) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({});

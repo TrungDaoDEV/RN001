@@ -9,6 +9,7 @@ import SelectKH from '../components/InputScr/DonHang/SelectKH';
 import SelectDH from '../components/InputScr/DonHang/SelectDH';
 import SelectCTDH from '../components/InputScr/DonHang/SelectCTDH';
 import SelectHH from '../components/InputScr/DonHang/SelectHH';
+import MayDet from '../components/InputScr/MayDet';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ export default function StackMain() {
         headerShown: false,
       }}>
       <Stack.Screen name="Main" component={MainNavigation} />
+      {/* <Stack.Screen name="DonHang" component={DonHang} /> */}
       <Stack.Screen
         name="DonHang"
         component={DonHang}
@@ -27,6 +29,7 @@ export default function StackMain() {
       />
       <Stack.Screen name="SanLuong" component={SanLuong} />
       <Stack.Screen name="NhapSanLuong" component={NhapSanLuong} />
+      <Stack.Screen name="MayDet" component={MayDet} />
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="SelectKH" component={SelectKH} />
       <Stack.Screen name="SelectDH" component={SelectDH} />

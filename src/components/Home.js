@@ -1,9 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import {FlatList, SafeAreaView, Text, View} from 'react-native';
+/* eslint-disable no-alert */
+/* eslint-disable no-unused-vars */
+import {
+  FlatList,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {io} from 'socket.io-client';
-// eslint-disable-next-line no-unused-vars
-import axios from 'axios';
 import {urlAPI, getDataIn, LOAD_MAYCHAY} from '../common/config';
 import StyleCommon from '../theme/styleCommon';
 
@@ -11,11 +17,9 @@ const LOAD_TTMAY = LOAD_MAYCHAY;
 
 export default function Home({navigation}) {
   const [dataMaydet, setDataMaydet] = useState([]);
-  const {text, bao, active, inactive} = StyleCommon;
-  // const [time_D1M1, setTime_D1M1] = useState(new Date());
+  const {headerTXT, text, bao, active, inactive} = StyleCommon;
 
   useEffect(() => {
-    // const socket = io(urlAPI, { jsonp: false });
     const socket = io(urlAPI, {transports: ['websocket']});
     socket.on('Server-send-TTM', function (items) {
       console.log(
@@ -28,6 +32,9 @@ export default function Home({navigation}) {
       );
       getDataIn(LOAD_TTMAY, setDataMaydet);
     });
+    // const unsubscribe = navigation.addListener('focus', () => {
+    getDataIn(LOAD_TTMAY, setDataMaydet);
+    // });
     return () => {
       socket.close();
     };
@@ -37,46 +44,40 @@ export default function Home({navigation}) {
     return dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds(); //format: d-m-y;
   };
   const renderItem = ({item, index}) => {
+    const {May, SL, time_off, run, stop, Trangthai} = item;
     return (
-      <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-        <View style={{flex: 2}}>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}>
-            <Text style={text}>{item.May}</Text>
-            {/* <Text style={{}}>{item.Trangthai}</Text> */}
-            {item.Trangthai === 1 ? (
-              <Text style={{}}>
-                {item.time_off} / {getCurrentTime()}
-              </Text>
-            ) : null}
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}>
-            <Text>
-              ON: {item.run}/{item.stop}: OFF
-            </Text>
-          </View>
-        </View>
-        <View style={[bao, item.Trangthai ? active : inactive]}>
-          <Text style={text}>{item.Trangthai ? 'OFF' : 'ON'}</Text>
-        </View>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          alert(
+            'Máy:' +
+              May +
+              ' Giờ đứng: ' +
+              time_off +
+              ' Stop:' +
+              stop +
+              ' Run:' +
+              run +
+              ' SL:' +
+              SL,
+          );
+        }}
+        style={[bao, item.Trangthai ? active : inactive, {flex: 1 / 3}]}>
+        <Text style={text}>{item.May}</Text>
+      </TouchableOpacity>
     );
   };
   return (
     <SafeAreaView style={{flex: 1}}>
+      <View style={{alignItems: 'center', marginTop: 10}}>
+        <Text style={headerTXT}>TÌNH TRẠNG MÁY</Text>
+        {/* <Text>Tổng Máy đang đứng: </Text>
+        <Text>Tổng Thời gian đứng: </Text>
+        <Text>Tổng Sản lượng Ca: </Text> */}
+      </View>
+      <View style={{borderBottomWidth: 1, marginVertical: 10}} />
       <FlatList
         data={dataMaydet}
+        numColumns={4}
         renderItem={renderItem}
         keyExtractor={(item, index) => index}
         // extraData={dataMaydet}

@@ -1,5 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   FlatList,
   SafeAreaView,
@@ -19,6 +20,7 @@ import {
   DELETE_DONHANG,
 } from '../../../common/config';
 import axios from 'axios';
+import styleCommon from '../../../theme/styleCommon';
 
 export default function SelectDH(props) {
   const {navigation, route} = props;
@@ -28,12 +30,12 @@ export default function SelectDH(props) {
   const [idDHag, setIdDHag] = useState();
   const [ngayDH, setNgayDH] = useState('');
   const [tinhTrang, setTinhTrang] = useState(0);
+  const {text, inputTxt} = styleCommon;
 
   const header = {idKH: `${idKH}`};
   useEffect(() => {
     getDataWithHeader(GET_DONHANG, setDataDH, header);
     return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const DayNutBam = tabs.map(tab => {
     return (
@@ -132,38 +134,49 @@ export default function SelectDH(props) {
   const renderItems = ({item, index}) => {
     return (
       <TouchableOpacity
-        style={{flexDirection: 'row', justifyContent: 'space-between'}}
+        //style={{ flexDirection: 'row', justifyContent: 'space-between' }}
         onPress={() => {
           handlePrintScr(item);
         }}>
-        <Text>idDH {item.idDH}</Text>
-        <Text>Ngày Đặt: {item.NgayDat}</Text>
+        {/* <Text style={text}>idDH {item.idDH}</Text> */}
+        <View style={{borderBottomWidth: 1, marginVertical: 10}} />
+        {item.TinhTrang === '0' ? (
+          <Text style={[text, {fontSize: 20, color: 'green'}]}>
+            Ngày Đặt: {item.NgayDat}
+          </Text>
+        ) : (
+          <Text style={[text, {fontSize: 20, color: 'red'}]}>
+            Ngày Đặt: {item.NgayDat}
+          </Text>
+        )}
       </TouchableOpacity>
     );
   };
   return (
     <SafeAreaView>
-      <Text>SelectDH</Text>
-      <Text>Công ty: {tenKH}</Text>
-      <View style={{flexDirection: 'row'}}>
+      <Text style={[text, {fontSize: 30, color: 'blue'}]}>Chọn Đơn Hàng</Text>
+      <Text style={text}>Công ty: {tenKH}</Text>
+      <View>
         <View style={{flexDirection: 'row'}}>
-          <Text>Ngày Đặt: </Text>
+          <Text style={text}>Ngày Đặt: </Text>
           <TextInput
+            style={inputTxt}
             placeholder="Ngày đặt"
             onChangeText={txt => setNgayDH(txt)}
             value={ngayDH}
           />
         </View>
         <View style={{flexDirection: 'row'}}>
-          <Text>Tình trạng: </Text>
+          <Text style={text}>Tình trạng:</Text>
           <TextInput
+            style={inputTxt}
             placeholder="Tình trạng"
             onChangeText={txt => setTinhTrang(txt)}
             value={tinhTrang}
           />
         </View>
       </View>
-
+      <View style={{borderBottomWidth: 1, marginVertical: 10}} />
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         {DayNutBam}
       </View>

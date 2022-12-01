@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,9 +13,7 @@ export default function MainNavigation() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      // initialRouteName="HomeAdd"
       activeColor="blue"
-      // eslint-disable-next-line react-native/no-inline-styles
       barStyle={{backgroundColor: 'powderblue'}}>
       <Tab.Screen
         name="Home"

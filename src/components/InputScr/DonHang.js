@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-shadow */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import {
   FlatList,
@@ -35,7 +35,7 @@ export default function DonHang(props) {
   const [sl_Det, setSL_Det] = useState(0);
   //xuất ra màn hình
   const [dataDonHang, setDataDonHang] = useState([]);
-  const {button1} = styleCommon;
+  const {button1, text, txt} = styleCommon;
 
   console.log('first ' + InputSL + '  idMD : ' + idMD + ' Ngày: ' + Ngay);
 
@@ -106,18 +106,47 @@ export default function DonHang(props) {
         onPress={() => {
           handleSelectDonHang(item);
         }}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{fontSize: 18, fontWeight: 'bold'}}>{TenKH}</Text>
-          <Text>{NgayDat}</Text>
+        <View style={{borderBottomWidth: 1, marginVertical: 6}} />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 3,
+          }}>
+          <View style={{flex: 1, alignItems: 'flex-start', marginLeft: 3}}>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>{TenKH}</Text>
+          </View>
+          <View style={{flex: 0.7}}>
+            <Text style={{fontSize: 18}}>{NgayDat}</Text>
+          </View>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <Text style={{fontSize: 18}}>{TenHH}</Text>
-          <Text>{Mau}</Text>
-          <Text>
-            Dệt {SL_Det}/{SL_Dat} Đặt
-          </Text>
+          <View style={{flex: 1.3, alignItems: 'center'}}>
+            <Text style={{fontSize: 18}}>{TenHH}</Text>
+          </View>
+          <View style={{flex: 0.6, alignItems: 'flex-start'}}>
+            <Text style={{fontSize: 18}}>{Mau}</Text>
+          </View>
+          {item.SL_Det ? (
+            item.SL_Det > item.SL_Dat ? (
+              <View style={{flex: 1, alignItems: 'flex-end', marginRight: 3}}>
+                <Text style={{fontSize: 18, color: 'red'}}>
+                  Dệt {SL_Det}/{SL_Dat} Đặt
+                </Text>
+              </View>
+            ) : (
+              <View style={{flex: 1, alignItems: 'flex-end', marginRight: 3}}>
+                <Text style={{fontSize: 18, color: 'green'}}>
+                  Dệt {SL_Det}/{SL_Dat} Đặt
+                </Text>
+              </View>
+            )
+          ) : (
+            <View style={{flex: 1, alignItems: 'flex-end', marginRight: 3}}>
+              <Text style={{fontSize: 18, color: 'black'}}>Đặt: {SL_Dat}</Text>
+            </View>
+          )}
         </View>
-        <View style={{borderBottomWidth: 1}} />
       </TouchableOpacity>
     );
   };
@@ -129,9 +158,12 @@ export default function DonHang(props) {
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            margin: 5,
+            marginTop: 5,
           }}>
-          <Text>Khách Hàng: {tenKH}</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={text}>Khách: </Text>
+            <Text style={[text, {fontSize: 30, color: 'blue'}]}>{tenKH}</Text>
+          </View>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('SelectKH', {
@@ -140,17 +172,16 @@ export default function DonHang(props) {
                 setIdDH: setIdDH,
                 setIdCTDH: setIdCTDH,
               });
-            }}>
-            <Text>Chọn KH</Text>
+            }}
+            style={[button1, {width: 100}]}>
+            <Text style={{color: 'white', fontSize: 16}}>Chọn KH</Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            margin: 5,
-          }}>
-          <Text>Ngày đặt: {idDH === '' ? null : ngayDat}</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={text}>Ngày đặt:</Text>
+            <Text style={txt}>{idDH === '' ? null : ngayDat}</Text>
+          </View>
           <TouchableOpacity
             onPress={() => {
               tenKH === ''
@@ -164,12 +195,12 @@ export default function DonHang(props) {
                     setTenHH: setTenHH,
                     setMau: setMau,
                   });
-            }}>
-            <Text>Chọn Đơn hàng</Text>
+            }}
+            style={[button1, {width: 100}]}>
+            <Text style={{color: 'white', fontSize: 16}}>Chọn ĐH</Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{flexDirection: 'row', justifyContent: 'center', margin: 5}}>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           {InputSL ? (
             <View>
               <Text>idCTDH: {idCTDH === '' ? null : idCTDH}</Text>
@@ -178,10 +209,11 @@ export default function DonHang(props) {
               <Text>SL Dệt: {idCTDH === '' ? null : sl_Det}</Text>
             </View>
           ) : null}
-
           <TouchableOpacity
             onPress={() => {
-              ngayDat === ''
+              tenKH === ''
+                ? alert('Nhập Khách hàng vào trước!')
+                : ngayDat === ''
                 ? alert('Chọn đơn hàng - Ngày đặt trước!')
                 : navigation.navigate('SelectCTDH', {
                     idDH: idDH,
@@ -194,8 +226,9 @@ export default function DonHang(props) {
                     setMau: setMau,
                     setSL_Det: setSL_Det,
                   });
-            }}>
-            <Text>Chi Tiết ĐH</Text>
+            }}
+            style={[button1, {width: 140}]}>
+            <Text style={{color: 'white', fontSize: 16}}>Chi Tiết ĐH</Text>
           </TouchableOpacity>
         </View>
         {InputSL ? (
@@ -218,7 +251,6 @@ export default function DonHang(props) {
         ) : (
           ''
         )}
-        <View style={{borderColor: 'black', borderBottomWidth: 1}} />
         <View style={{flex: 1}}>
           <FlatList
             data={dataDonHang}

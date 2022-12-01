@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import DonHang from '../components/InputScr/DonHang';
 import SanLuong from '../components/InputScr/SanLuong';
+import MayDet from '../components/InputScr/MayDet';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -26,6 +28,11 @@ export default function StackInput() {
         component={SanLuong}
         options={{tabBarLabel: 'Sản Lượng'}}
       />
+      {/* <Tab.Screen
+                name="MayDet"
+                component={MayDet}
+                options={{ tabBarLabel: 'Máy Dệt' }}
+            /> */}
     </Tab.Navigator>
   );
 }

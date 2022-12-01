@@ -1,22 +1,23 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   SafeAreaView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {urlAPI, LOAD_SANLUONG, getDataIn} from '../../common/config';
+import styleCommon from '../../theme/styleCommon';
 
 export default function SanLuong(props) {
   const [dataIn, setDataIn] = useState([]);
   const [date, setDate] = useState(new Date());
+  const {txt, h2} = styleCommon;
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('focus', () => {
@@ -28,9 +29,6 @@ export default function SanLuong(props) {
     return () => {};
   }, []);
 
-  const handleNgay = () => {
-    setDate(getCurrentDate());
-  };
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setDate(currentDate);
@@ -82,9 +80,7 @@ export default function SanLuong(props) {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <Text style={styles.title}>{item.May}</Text>
-              {/* <Text style={styles.txt}>So May Chay: {item.SoMayChay}</Text>
-              <Text style={styles.txt}>So Ngay Det: {item.SoNgayDet}</Text> */}
+              <Text style={h2}>{item.May}</Text>
             </View>
             <View
               style={{
@@ -93,17 +89,26 @@ export default function SanLuong(props) {
                 justifyContent: 'space-between',
                 marginTop: 5,
               }}>
-              <Text style={styles.txt}>{item.TenHH}</Text>
-              <Text style={styles.txt}>{item.Mau}</Text>
-              <Text style={styles.txt}>
-                {item.TongDet}/{item.SL_Dat}
-              </Text>
+              <View style={{flex: 2, alignItems: 'center'}}>
+                <Text style={txt}>{item.TenHH}</Text>
+              </View>
+              <View style={{flex: 1, alignItems: 'flex-start'}}>
+                <Text style={txt}>{item.Mau}</Text>
+              </View>
+              {item.TongDet > item.SL_Dat ? (
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  <Text style={[txt, {fontWeight: 'bold', color: 'red'}]}>
+                    {item.TongDet}/{item.SL_Dat}
+                  </Text>
+                </View>
+              ) : (
+                <View style={{flex: 1, alignItems: 'center'}}>
+                  <Text style={[txt, {color: 'green'}]}>
+                    {item.TongDet}/{item.SL_Dat}
+                  </Text>
+                </View>
+              )}
             </View>
-            {/* <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', marginTop: 5 }}>
-              <Text style={styles.txt}>Ngay: {item.SL_Ngay}</Text>
-              <Text style={styles.txt}>TC: {item.SL_TC}</Text>
-              <Text style={styles.txt}>Đêm: {item.SL_Dem}</Text>
-            </View> */}
           </TouchableOpacity>
         </View>
         <View style={{borderBottomWidth: 1}} />
@@ -120,26 +125,21 @@ export default function SanLuong(props) {
           alignItems: 'center',
           margin: 10,
         }}>
-        <Text>Ngày Nhập: {date.toLocaleDateString()}</Text>
+        <Text style={txt}>Ngày Nhập: {date.toLocaleDateString()}</Text>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text>Chọn Ngày:</Text>
-          <TouchableOpacity
-            onPress={() => {
-              handleNgay();
-            }}
-          />
+          <Text style={txt}>Chọn Ngày:</Text>
           {/* <DateTimePicker
             testID="dateTimePicker"
             value={date}
-            mode="date"
+            mode='date'
             // is24Hour={true}
             onChange={onChange}
-            style={{width: 100, margin: 3}}
+            style={{ width: 100, margin: 3 }}
           /> */}
         </View>
       </View>
@@ -154,13 +154,3 @@ export default function SanLuong(props) {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  txt: {
-    fontSize: 16,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});

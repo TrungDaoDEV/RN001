@@ -1,5 +1,5 @@
-/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
+/* eslint-disable no-alert */
 import {
   FlatList,
   SafeAreaView,
@@ -19,6 +19,7 @@ import {
   getDataIn,
 } from '../../../common/config';
 import axios from 'axios';
+import styleCommon from '../../../theme/styleCommon';
 
 export default function SelectKH(props) {
   const {navigation, route} = props;
@@ -29,6 +30,7 @@ export default function SelectKH(props) {
   const [diaChi, setDiaChi] = useState('');
   const [soDT, setSoDT] = useState('');
   const [ghiChu, setGhiChu] = useState('');
+  const {text, inputTxt} = styleCommon;
 
   useEffect(() => {
     getDataIn(GET_KHACHHANG, setDataKH);
@@ -139,21 +141,23 @@ export default function SelectKH(props) {
   const renderItems = ({item, index}) => {
     return (
       <TouchableOpacity
-        style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}
+        style={{flex: 1, justifyContent: 'space-between'}}
         onPress={() => {
           handlePrintScr(item);
         }}>
-        <View style={{flex: 1}}>
-          <Text>id {item.idKH}</Text>
-        </View>
+        {/* <View style={{ flex: 1 }}>
+                    <Text>id {item.idKH}</Text>
+                </View> */}
+        <View style={{borderBottomWidth: 1, marginVertical: 10}} />
         <View
           style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
-          <Text>Tên KH </Text>
-          <Text>{item.TenKH}</Text>
+          <Text style={text}>KH: {item.TenKH}</Text>
+          <Text style={text}>ĐT: {item.SoDT}</Text>
+          <Text style={text}>ĐC: {item.DiaChi}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -161,15 +165,17 @@ export default function SelectKH(props) {
 
   return (
     <SafeAreaView>
-      <Text>SelectKH</Text>
+      <Text style={[text, {fontSize: 25, color: 'blue'}]}>Khách Hàng</Text>
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-        <View>
+        <View style={{height: 90, flex: 1}}>
           <TextInput
+            style={inputTxt}
             placeholder="Tên Khách Hàng"
             onChangeText={txt => setTenKHag(txt)}
             value={tenKHag}
           />
           <TextInput
+            style={inputTxt}
             placeholder="Số ĐT"
             onChangeText={txt => setSoDT(txt)}
             value={soDT}
@@ -177,17 +183,20 @@ export default function SelectKH(props) {
         </View>
         <View>
           <TextInput
+            style={inputTxt}
             placeholder="Địa chỉ"
             onChangeText={txt => setDiaChi(txt)}
             value={diaChi}
           />
           <TextInput
+            style={inputTxt}
             placeholder="Ghi chú"
             onChangeText={txt => setGhiChu(txt)}
             value={ghiChu}
           />
         </View>
       </View>
+      <View style={{borderBottomWidth: 1, marginVertical: 10}} />
       <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
         {DayNutBam}
       </View>
