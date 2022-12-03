@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-/* eslint-disable no-alert */
 /* eslint-disable no-unused-vars */
 import {
   FlatList,
   SafeAreaView,
   Text,
+  Modal,
   TouchableOpacity,
   View,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {io} from 'socket.io-client';
@@ -17,7 +18,20 @@ const LOAD_TTMAY = LOAD_MAYCHAY;
 
 export default function Home({navigation}) {
   const [dataMaydet, setDataMaydet] = useState([]);
-  const {headerTXT, text, bao, active, inactive} = StyleCommon;
+  const {
+    centeredView,
+    modalView,
+    modalText,
+    headerTXT,
+    text,
+    bao,
+    h2,
+    txt,
+    active,
+    inactive,
+  } = StyleCommon;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [itemMayDet, setItemMayDet] = useState(0);
 
   useEffect(() => {
     const socket = io(urlAPI, {transports: ['websocket']});
@@ -43,23 +57,47 @@ export default function Home({navigation}) {
     var dt = new Date();
     return dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds(); //format: d-m-y;
   };
+  const renderCTMCodesModal = () => {
+    if (dataMaydet.length === 0) {
+      return;
+    }
+    const {May, SL, time_off, run, stop, Trangthai} = dataMaydet[itemMayDet];
+    return (
+      <View style={centeredView}>
+        <Modal animationType="slide" transparent={true} visible={modalVisible}>
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={centeredView}>
+              <View style={modalView}>
+                {Trangthai ? (
+                  <Text style={[modalText, {marginBottom: 10, color: 'red'}]}>
+                    Máy {May}
+                  </Text>
+                ) : (
+                  <Text style={[modalText, {marginBottom: 10, color: 'green'}]}>
+                    Máy {May}
+                  </Text>
+                )}
+                <View style={{justifyContent: 'space-around'}}>
+                  {Trangthai ? (
+                    <Text style={txt}>Giờ Đứng: {time_off}</Text>
+                  ) : null}
+                  <Text style={txt}>Tổng TG Đứng: {stop}</Text>
+                  <Text style={txt}>Tổng TG Chạy: {run}</Text>
+                  <Text style={txt}>Tổng SL: {SL}</Text>
+                </View>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
+    );
+  };
   const renderItem = ({item, index}) => {
-    const {May, SL, time_off, run, stop, Trangthai} = item;
     return (
       <TouchableOpacity
         onPress={() => {
-          alert(
-            'Máy:' +
-              May +
-              ' Giờ đứng: ' +
-              time_off +
-              ' Stop:' +
-              stop +
-              ' Run:' +
-              run +
-              ' SL:' +
-              SL,
-          );
+          setModalVisible(true);
+          setItemMayDet(index);
         }}
         style={[bao, item.Trangthai ? active : inactive, {flex: 1 / 3}]}>
         <Text style={text}>{item.May}</Text>
@@ -82,6 +120,7 @@ export default function Home({navigation}) {
         keyExtractor={(item, index) => index}
         // extraData={dataMaydet}
       />
+      {renderCTMCodesModal()}
     </SafeAreaView>
   );
 }

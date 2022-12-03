@@ -2,7 +2,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import {
+  Button,
   FlatList,
+  Platform,
   SafeAreaView,
   Text,
   TouchableOpacity,
@@ -10,7 +12,9 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, {
+  DateTimePickerAndroid,
+} from '@react-native-community/datetimepicker';
 import {urlAPI, LOAD_SANLUONG, getDataIn} from '../../common/config';
 import styleCommon from '../../theme/styleCommon';
 
@@ -34,6 +38,30 @@ export default function SanLuong(props) {
     setDate(currentDate);
   };
 
+  const openDatePickHandler = () => {
+    DateTimePickerAndroid.open({
+      mode: 'date',
+      value: date,
+      onChange: (_, newDateTime) => {
+        if (newDateTime) {
+          setDate(newDateTime);
+        }
+      },
+      // onChange: (event, newDate) => {
+      //   if (newDate) {
+      //     DateTimePickerAndroid.open({
+      //       mode: 'time',
+      //       value: newDate,
+      //       onChange: (_, newDateTime) => {
+      //         if (newDateTime) {
+      //           setDate(newDateTime);
+      //         }
+      //       },
+      //     });
+      //   }
+      // },
+    });
+  };
   const getCurrentDate = () => {
     var dt = new Date();
     var hour = dt.getHours();
@@ -132,15 +160,22 @@ export default function SanLuong(props) {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <Text style={txt}>Chọn Ngày:</Text>
-          {/* <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode='date'
-            // is24Hour={true}
-            onChange={onChange}
-            style={{ width: 100, margin: 3 }}
-          /> */}
+          {/* <Text style={txt}>Chọn Ngày:</Text> */}
+          {Platform.OS === 'ios' ? (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode="date"
+              // is24Hour={true}
+              onChange={onChange}
+              style={{width: 100, margin: 3}}
+            />
+          ) : (
+            <>
+              {/* <Text>{date.getTime()}</Text> */}
+              <Button title="Chọn Ngày" onPress={openDatePickHandler} />
+            </>
+          )}
         </View>
       </View>
       <View style={{borderBottomWidth: 1, borderBottomColor: 'powderblue'}} />

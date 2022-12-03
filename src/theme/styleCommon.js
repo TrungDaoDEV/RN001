@@ -1,6 +1,33 @@
 import {StyleSheet} from 'react-native';
 
 const StyleCommon = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 10,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: 'gray',
+    shadowOffset: {
+      width: 1,
+      height: 2,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 22,
+    textAlign: 'center',
+  },
   viewMain: {
     padding: 20,
   },
