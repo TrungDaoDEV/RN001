@@ -9,11 +9,11 @@ const StyleCommon = StyleSheet.create({
   },
   modalView: {
     margin: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'powderblue',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: 'gray',
+    shadowColor: 'black',
     shadowOffset: {
       width: 1,
       height: 2,
